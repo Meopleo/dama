@@ -30,7 +30,7 @@ public class JatekosValsztoPanel extends JPanel {
         player1ComboBox.setEditable(true);
         add(player1ComboBox, BorderLayout.WEST);
 
-        JComboBox<String> player2ComboBox = new JComboBox<>(new String[]{"Játékos 1", "Játékos 2"});
+        JComboBox<String> player2ComboBox = new JComboBox<>(new String[]{"Játékos 2", "Játékos 1"});
         player2ComboBox.setEditable(true);
         add(player2ComboBox, BorderLayout.EAST);
 
