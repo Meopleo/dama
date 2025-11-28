@@ -5,10 +5,11 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Font;
 
-import javax.swing.DebugGraphics;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import edu.hazi.model.Szabalyok;
 
 
 
@@ -22,6 +23,7 @@ public class JatekTablaPanel extends JPanel {
 
     private javax.swing.ImageIcon feherDama;
     private javax.swing.ImageIcon feketeDama;
+    private Szabalyok szabalyok;
 
     
 
@@ -139,6 +141,8 @@ public class JatekTablaPanel extends JPanel {
             }
         }
 
+        this.szabalyok = new Szabalyok(this.mezo);
+
                    
         
         add(boardPanel, BorderLayout.CENTER);
@@ -160,8 +164,8 @@ public class JatekTablaPanel extends JPanel {
 
     public void kattintasTortent(Mezo mezo) {
         if (mezo.isFoglalt() && mezo.isFehere() == feherLep) { // Csak a megfelelő színű bábu választható ki
-            boolean kenyszerUtes = globUtesKenyszer();
-            if (kenyszerUtes && !leheteUtni(mezo)) {
+            boolean kenyszerUtes = szabalyok.globUtesKenyszer(feherLep);
+            if (kenyszerUtes && !szabalyok.leheteUtni(mezo)) {
                 System.out.println("Ütés kötelező! Válassz egy ütésre képes bábut.");
                 return;
             }
@@ -177,7 +181,7 @@ public class JatekTablaPanel extends JPanel {
         else if (kivalasztottMezo != null && !mezo.isFoglalt()) {// Van kiválasztott mező, próbálunk lépni            
             
             // Ugras
-            Mezo atugrottMezo = keresAtugrottMezok(kivalasztottMezo, mezo);
+            Mezo atugrottMezo = szabalyok.keresAtugrottMezok(kivalasztottMezo, mezo);
             
             if (atugrottMezo != null) {
                 
@@ -195,7 +199,7 @@ public class JatekTablaPanel extends JPanel {
                     
                     
                     
-                    if (leheteUtni(mezo)){
+                    if (szabalyok.leheteUtni(mezo)){
                         System.out.println("További ütés lehetséges!");
                         takaritas();
                         kivalasztottMezo = mezo;
@@ -212,7 +216,7 @@ public class JatekTablaPanel extends JPanel {
             }
             
             // Simas lépés
-            if (globUtesKenyszer()) {
+            if (szabalyok.globUtesKenyszer(feherLep)) {
                 System.out.println("HIBA: Kötelező ütni! Nem léphetsz simát.");
                 return; // Megállítjuk a folyamatot, nem engedjük a lépést
             }
@@ -278,108 +282,7 @@ public class JatekTablaPanel extends JPanel {
 
     }
 
-    public Mezo keresAtugrottMezok(Mezo honnan, Mezo hova) {
-        // Dáma esetén mind a négy irányt ellenőrizzük
-
-        if (honnan.isDama()){
-            if (honnan.ugrasJobbfent(hova) != null) {
-                return honnan.ugrasJobbfent(hova);
-            }
-            if (honnan.ugrasBalfent(hova) != null) {
-                return honnan.ugrasBalfent(hova);
-            }
-            if (honnan.ugrasJobblent(hova) != null) {
-                return honnan.ugrasJobblent(hova);
-            }
-            if (honnan.ugrasBallent(hova) != null) {
-                return honnan.ugrasBallent(hova);
-            }
-        }
-        // Fehér vagy fekete bábu esetén csak a megfelelő irányokat ellenőrizzük
-        else if (honnan.isFehere()) {
-            
-            if (honnan.ugrasJobbfent(hova) != null) {
-                return honnan.ugrasJobbfent(hova);
-            }
-            if (honnan.ugrasBalfent(hova) != null) {
-                return honnan.ugrasBalfent(hova);
-            }
-        }
-        else {
-            if (honnan.ugrasJobblent(hova) != null) {
-                return honnan.ugrasJobblent(hova);
-            }
-            if (honnan.ugrasBallent(hova) != null) {
-                return honnan.ugrasBallent(hova);
-            }
-        }
-        return null;
-    }
-
-    public boolean leheteUtni(Mezo honnan) {
-        if (honnan.isDama()){
-            // Dáma esetén mind a négy irányt ellenőrizzük
-            
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getJobbfent(), honnan.getJobbfent() != null ? honnan.getJobbfent().getJobbfent() : null)) {
-                return true;
-            }
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getBalfent(), honnan.getBalfent() != null ? honnan.getBalfent().getBalfent() : null)) {
-                return true;
-            }
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getJobblent(), honnan.getJobblent() != null ? honnan.getJobblent().getJobblent() : null)) {
-                return true;
-            }
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getBallent(), honnan.getBallent() != null ? honnan.getBallent().getBallent() : null)) {
-                return true;
-            }
-        }
-        else if (honnan.isFehere()) {
-            // Fehér bábu esetén csak felfelé néző irányokat ellenőrizzük
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getJobbfent(), honnan.getJobbfent() != null ? honnan.getJobbfent().getJobbfent() : null)) {
-                return true;
-            }
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getBalfent(), honnan.getBalfent() != null ? honnan.getBalfent().getBalfent() : null)) {
-                return true;
-            }
-        } else {
-            // Fekete bábu esetén csak lefelé néző irányokat ellenőrizzük
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getJobblent(), honnan.getJobblent() != null ? honnan.getJobblent().getJobblent() : null)) {
-                return true;
-            }
-            if (ellenorizUgrasLehetoseg(honnan, honnan.getBallent(), honnan.getBallent() != null ? honnan.getBallent().getBallent() : null)) {
-                return true;
-            }
-        
-        }
-        return false;
-    }
-
-    private boolean ellenorizUgrasLehetoseg(Mezo en, Mezo szomszed, Mezo utana) {
     
-        if (szomszed == null || utana == null) {
-            return false;
-        }
-
-        boolean szomszedEllenseg = szomszed.isFoglalt() && (szomszed.isFehere() != en.isFehere());
-            
-        boolean utanaUres = !utana.isFoglalt();
-        
-        return szomszedEllenseg && utanaUres;
-    }
-
-    public boolean globUtesKenyszer(){
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (mezo[i][j].isFoglalt() && mezo[i][j].isFehere() == feherLep) {
-                    if (leheteUtni(mezo[i][j])){
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     
     private void korVegeEsEllenorzes() {
         System.out.println("--- Kör vége ---");
@@ -392,13 +295,13 @@ public class JatekTablaPanel extends JPanel {
         takaritas();
 
         // 2. Ütéskényszer ellenőrzése és jelzése
-        if (globUtesKenyszer()) {
+        if (szabalyok.globUtesKenyszer(feherLep)) {
             System.out.println("FIGYELEM: Ütéskényszer van!");
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     Mezo m = mezo[i][j];
                     // Ha a bábu a mostani játékosé ÉS tud ütni -> SZÍNEZZÜK narancsara
-                    if (m.isFoglalt() && m.isFehere() == feherLep && leheteUtni(m)) {
+                    if (m.isFoglalt() && m.isFehere() == feherLep && szabalyok.leheteUtni(m)) {
                         m.setBackground(java.awt.Color.ORANGE); // Vagy PINK, ami jobban tetszik
                     }
                 }
@@ -418,39 +321,17 @@ public class JatekTablaPanel extends JPanel {
         }
     }
 
-    public boolean leheteLepni(Mezo m){
-        if (m.isDama()){
-            return m.jobbFentUres() || m.balFentUres() || m.jobbLentUres() || m.balLentUres();
-        }
-        else if (m.isFehere()){
-            return m.balFentUres() || m.jobbFentUres();
-        }
-        else{
-            return m.balLentUres() || m.jobbLentUres();
-        }
-    }
+    
 
     private void ellenorizGyozelem() {
-    boolean vanLehetoseg = false;
+
+    boolean vanMegLepes = szabalyok.vanMegLepes(feherLep);
     
     // Végignézzük az összes mezőt
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            Mezo m = mezo[i][j];
-            // Ha a bábu a mostani játékosé (aki épp jön)
-            if (m.isFoglalt() && m.isFehere() == feherLep) {
-                // Tud ütni VAGY tud simát lépni?
-                if (leheteUtni(m) || leheteLepni(m)) {
-                    vanLehetoseg = true;
-                    break; // Találtunk egy lépést, tehát nincs vége, mehet tovább
-                }
-            }
-        }
-        if (vanLehetoseg) break;
-    }
+    
     
     // Ha végignéztük az összeset, és NEM találtunk lehetőséget -> GAME OVER
-    if (!vanLehetoseg) {
+    if (!vanMegLepes) {
         String nyertes = feherLep ? "Fekete" : "Fehér"; // Ha Fehér jönne, de nem tud, akkor Fekete nyert
         
         // Kiírjuk az üzenetet és visszalépünk a menübe

@@ -67,7 +67,7 @@ public class Mezo extends JButton {
     public boolean balLentUres(){
         return this.getBallent() != null && !this.getBallent().isFoglalt();
     }
-    
+
 
     public int getSor() {
         return sor;
