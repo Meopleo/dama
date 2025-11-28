@@ -1,13 +1,28 @@
 package edu.hazi.data;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.io.File;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AdatKezeloTest {
+    private static final String TESZT_FAJL = "teszt_jatekosok.json";
+
+    @BeforeEach
+    void tisztitas() {
+        // Minden egyes teszt előtt letöröljük a fájlt, ha létezik.
+        // Így mindig 0-ról indul a teszt, nem maradnak benne régi adatok.
+        File file = new File(TESZT_FAJL);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 
     @Test
     void testPontszamKezeles() {
-        AdatKezelo adat = new AdatKezelo();
+        AdatKezelo adat = new AdatKezelo(TESZT_FAJL);
         
         // 1. Új játékos hozzáadása
         // "TesztElek" nyert a "VesztesBela" ellen
@@ -22,7 +37,7 @@ public class AdatKezeloTest {
 
     @Test
     void testPontszamNovekedes() {
-        AdatKezelo adat = new AdatKezelo();
+        AdatKezelo adat = new AdatKezelo(TESZT_FAJL);
         
         // Adunk neki előre pontot (trükkösen kétszer nyer)
         adat.jatekVegKez("Bajnok", "Senki"); // 10 pont

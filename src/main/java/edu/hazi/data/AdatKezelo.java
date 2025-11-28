@@ -8,11 +8,17 @@ import java.io.*;
 
 public class AdatKezelo {
 
-    private static final String fajlNev = "jatekosok.json";
+    private String fajlNev = "jatekosok.json";
     
     private Map<String, Integer> jatekosAdatok;
 
     public AdatKezelo() {
+        this.jatekosAdatok = new HashMap<>();
+        betoltes();
+    }
+
+    public AdatKezelo(String tesztfajlNev) {
+        this.fajlNev = tesztfajlNev;
         this.jatekosAdatok = new HashMap<>();
         betoltes();
     }
