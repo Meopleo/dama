@@ -32,6 +32,11 @@ public class AdatKezelo {
     }
 
 
+    /**
+     * Kezeli a játék végét: frissíti a pontszámokat és ment.
+     * @param nyertes A győztes játékos neve (+10 pont)
+     * @param vesztes A vesztes játékos neve (-2 pont)
+     */
     public void jatekVegKez(String nyertes, String vesztes) {
         if (nyertes.equals("Vendég") || vesztes.equals("Vendég")) {
             return; // Ha vendég játszott, nem mentünk adatot
@@ -49,6 +54,10 @@ public class AdatKezelo {
         mentes();
     }
 
+    /**
+     * Elmenti a memóriában lévő adatokat a JSON fájlba.
+     * Kézi string-összefűzést használ a formátumhoz.
+     */
     private void mentes() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fajlNev))) {
             writer.write("{");
@@ -74,6 +83,10 @@ public class AdatKezelo {
         }
     }
 
+    /**
+     * Betölti a játékosok adatait a JSON fájlból a memóriába.
+     * Ha a fájl nem létezik vagy hibás, üres listával indul.
+     */
     private void betoltes() {
         File fajl = new File(fajlNev);
         if (!fajl.exists()) {
