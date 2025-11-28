@@ -25,6 +25,10 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+
+    /**     * Kicseréli a jelenlegi panelt egy újra.
+     * @param ujPanel Az új panel, amit be akarunk állítani
+     */
     public void panelCsere(JPanel ujPanel) {
         getContentPane().removeAll();
         add(ujPanel);

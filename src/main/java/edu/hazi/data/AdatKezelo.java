@@ -84,8 +84,8 @@ public class AdatKezelo {
     }
 
     /**
-     * Betölti a játékosok adatait a JSON fájlból a memóriába.
-     * Ha a fájl nem létezik vagy hibás, üres listával indul.
+     * Betölti a játékos adatokat a JSON fájlból a memóriába.
+     * Egyszerű string feldolgozást használ a formátumhoz.
      */
     private void betoltes() {
         File fajl = new File(fajlNev);

@@ -175,6 +175,11 @@ public class JatekTablaPanel extends JPanel {
     }
     
 
+    /**
+     * Kezeli a mezőkre történő kattintást.
+     * Elvégzi a kiválasztást, a lépés/ugrás ellenőrzését és a körváltást.
+     * @param mezo A mező, amire a játékos kattintott
+     */
     private void kattintasTortent(Mezo mezo) {
         if (mezo.isFoglalt() && mezo.isFehere() == feherLep) { // Csak a megfelelő színű bábu választható ki
             boolean kenyszerUtes = szabalyok.globUtesKenyszer(feherLep);
@@ -273,6 +278,11 @@ public class JatekTablaPanel extends JPanel {
     }
 
 
+    /**
+     * Végrehajtja a bábu mozgatását a táblán (ikon csere, adatok frissítése).
+     * @param honnan A kiinduló mező
+     * @param hova A célmező
+     */
     private void lepestVegrehajt(Mezo honnan, Mezo hova) {
         hova.setIcon(honnan.getIcon());
         hova.setFoglalt(true);
@@ -296,7 +306,9 @@ public class JatekTablaPanel extends JPanel {
     }
 
     
-    
+    /**
+     * Kezeli a kör végét: váltja a játékost, ellenőrzi az ütéskényszert és frissíti a kijelzést.
+     */
     private void korVegeEsEllenorzes() {
         System.out.println("--- Kör vége ---");
         
@@ -324,6 +336,9 @@ public class JatekTablaPanel extends JPanel {
     }
     
 
+    /** 
+     * Visszaállítja a sötét mezők eredeti színét.
+     */
     private void takaritas(){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -336,15 +351,14 @@ public class JatekTablaPanel extends JPanel {
     }
 
     
-
+    /**
+     * Ellenőrzi, hogy a játék véget ért-e (nincs több lépés).
+     * Ha igen, kezeli a győzelmet és visszalép a főmenübe.
+     */
     private void ellenorizGyozelem() {
 
         boolean vanMegLepes = szabalyok.vanMegLepes(feherLep);
     
-        // Végignézzük az összes mezőt
-    
-    
-        // Ha végignéztük az összeset, és NEM találtunk lehetőséget -> GAME OVER
         if (!vanMegLepes) {        
             String gyoztes = feherLep ? nev2 : nev1;
 
@@ -360,6 +374,9 @@ public class JatekTablaPanel extends JPanel {
         }
     }
 
+    /**
+     * Frissíti a játékosnév kijelzést a soron lévő játékos alapján.
+     */
     private void frissitNevKijelzes() {
         if (feherLep) {
             // Fehér jön: Az alsó név legyen zöld (vagy cián), a felső alap

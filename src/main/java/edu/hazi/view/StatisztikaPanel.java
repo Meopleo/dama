@@ -8,9 +8,17 @@ import javax.swing.JTable;
 
 import java.util.Map;
 
+
+/**
+ * A statisztikákat megjelenítő panel.
+ */
 public class StatisztikaPanel extends JPanel {
     private MainFrame mainFrame;
 
+    /**
+     * Létrehozza a statisztika nézetet és betölti az adatokat.
+     * @param mainFrame A főablak referenciája a visszalépéshez
+     */
     public StatisztikaPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
 

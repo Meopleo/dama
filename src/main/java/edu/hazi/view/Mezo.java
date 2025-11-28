@@ -20,6 +20,11 @@ public class Mezo extends JButton {
         this.oszlop = oszlop;
     }
 
+    /**
+     * Ellenőrzi, hogy a megadott mező szomszédos-e ezzel a mezővel.
+     * @param masik A vizsgált mező
+     * @return true, ha szomszédos, egyébként false
+     */
     public boolean isSzomszed(Mezo masik) {
         if (masik == jobbfent || masik == balfent || masik == jobblent || masik == ballent) {
             return true;
@@ -27,6 +32,12 @@ public class Mezo extends JButton {
         return false;
     }
 
+    /**
+     * Ellenőrzi, hogy a megadott mezőre lehet-e ugrani erről a mezőről.
+     * Visszaadja a köztes mezőt, ha lehetséges az ugrás, egyébként null.
+     * @param cel A célmező
+     * @return A köztes mező vagy null
+     */
     public Mezo ugrasJobbfent(Mezo cel){
         if (this.getJobbfent() != null && this.getJobbfent().getJobbfent() == cel) {
             return this.getJobbfent();
@@ -34,6 +45,12 @@ public class Mezo extends JButton {
         return null;
     }
 
+    /**
+     * Ellenőrzi, hogy a megadott mezőre lehet-e ugrani erről a mezőről.
+     * Visszaadja a köztes mezőt, ha lehetséges az ugrás, egyébként null.
+     * @param cel A célmező
+     * @return A köztes mező vagy null
+     */
     public Mezo ugrasBalfent(Mezo cel){
         if (this.getBalfent() != null && this.getBalfent().getBalfent() == cel) {
             return this.getBalfent();
@@ -41,6 +58,12 @@ public class Mezo extends JButton {
         return null;
     }
 
+    /**
+     * Ellenőrzi, hogy a megadott mezőre lehet-e ugrani erről a mezőről.
+     * Visszaadja a köztes mezőt, ha lehetséges az ugrás, egyébként null.
+     * @param cel A célmező
+     * @return A köztes mező vagy null
+     */
     public Mezo ugrasJobblent(Mezo cel){
         if (this.getJobblent() != null && this.getJobblent().getJobblent() == cel) {
             return this.getJobblent();
@@ -48,6 +71,12 @@ public class Mezo extends JButton {
         return null;
     }
 
+    /**
+     * Ellenőrzi, hogy a megadott mezőre lehet-e ugrani erről a mezőről.
+     * Visszaadja a köztes mezőt, ha lehetséges az ugrás, egyébként null.
+     * @param cel A célmező
+     * @return A köztes mező vagy null
+     */
     public Mezo ugrasBallent(Mezo cel){
         if (this.getBallent() != null && this.getBallent().getBallent() == cel) {
             return this.getBallent();
