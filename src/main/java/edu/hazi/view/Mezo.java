@@ -27,6 +27,48 @@ public class Mezo extends JButton {
         return false;
     }
 
+    public Mezo ugrasJobbfent(Mezo cel){
+        if (this.getJobbfent() != null && this.getJobbfent().getJobbfent() == cel) {
+            return this.getJobbfent();
+        }
+        return null;
+    }
+
+    public Mezo ugrasBalfent(Mezo cel){
+        if (this.getBalfent() != null && this.getBalfent().getBalfent() == cel) {
+            return this.getBalfent();
+        }
+        return null;
+    }
+
+    public Mezo ugrasJobblent(Mezo cel){
+        if (this.getJobblent() != null && this.getJobblent().getJobblent() == cel) {
+            return this.getJobblent();
+        }
+        return null;
+    }
+
+    public Mezo ugrasBallent(Mezo cel){
+        if (this.getBallent() != null && this.getBallent().getBallent() == cel) {
+            return this.getBallent();
+        }
+        return null;
+    }
+
+    public boolean jobbFentUres(){
+        return this.getJobbfent() != null && !this.getJobbfent().isFoglalt();
+    }
+    public boolean balFentUres(){
+        return this.getBalfent() != null && !this.getBalfent().isFoglalt();
+    }
+    public boolean jobbLentUres(){
+        return this.getJobblent() != null && !this.getJobblent().isFoglalt();
+    }
+    public boolean balLentUres(){
+        return this.getBallent() != null && !this.getBallent().isFoglalt();
+    }
+    
+
     public int getSor() {
         return sor;
     }
