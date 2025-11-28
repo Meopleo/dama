@@ -24,6 +24,9 @@ public class JatekTablaPanel extends JPanel {
     private javax.swing.ImageIcon feherDama;
     private javax.swing.ImageIcon feketeDama;
     private Szabalyok szabalyok;
+    private JLabel egyesJatekosPanel;
+    private JLabel kettesJatekosPanel;
+    
 
     
 
@@ -32,14 +35,19 @@ public class JatekTablaPanel extends JPanel {
         this.mainFrame = mainFrame;
         this.feherLep = true;
         this.kivalasztottMezo = null;
+        this.nev1 = nev1;
+        this.nev2 = nev2;
+        
 
         
         setLayout(new BorderLayout());
 
-        JLabel EgyesJatekosPanel = new JLabel(nev2);
-        EgyesJatekosPanel.setFont(new Font("Arial",Font.BOLD,32));
-        EgyesJatekosPanel.setHorizontalAlignment(JLabel.CENTER);
-        add(EgyesJatekosPanel, BorderLayout.NORTH);
+        kettesJatekosPanel = new JLabel(nev2);
+        kettesJatekosPanel.setFont(new Font("Arial",Font.BOLD,32));
+        kettesJatekosPanel.setHorizontalAlignment(JLabel.CENTER);
+        kettesJatekosPanel.setOpaque(true);
+        add(kettesJatekosPanel, BorderLayout.NORTH);
+
 
         JPanel boardPanel = new JPanel(new GridLayout(8, 8));
 
@@ -149,20 +157,25 @@ public class JatekTablaPanel extends JPanel {
 
 
         JPanel alsoresz = new JPanel(new GridLayout(2,1));
-        JLabel KettesJatekosPanel = new JLabel(nev1);
-        KettesJatekosPanel.setFont(new Font("Arial",Font.BOLD,32));
-        KettesJatekosPanel.setHorizontalAlignment(JLabel.CENTER);
+        egyesJatekosPanel = new JLabel(nev1);
+        egyesJatekosPanel.setFont(new Font("Arial",Font.BOLD,32));
+        egyesJatekosPanel.setHorizontalAlignment(JLabel.CENTER);
+        egyesJatekosPanel.setOpaque(true);
+        egyesJatekosPanel.setBackground(java.awt.Color.GREEN);
+        
+
+
         JButton visszaButton = new JButton("Vissza a Főmenübe");
         visszaButton.addActionListener(e -> {
             mainFrame.panelCsere(new FomenuPanel(mainFrame));
         });
-        alsoresz.add(KettesJatekosPanel);
+        alsoresz.add(egyesJatekosPanel);
         alsoresz.add(visszaButton);
         add(alsoresz, BorderLayout.SOUTH);
     }
     
 
-    public void kattintasTortent(Mezo mezo) {
+    private void kattintasTortent(Mezo mezo) {
         if (mezo.isFoglalt() && mezo.isFehere() == feherLep) { // Csak a megfelelő színű bábu választható ki
             boolean kenyszerUtes = szabalyok.globUtesKenyszer(feherLep);
             if (kenyszerUtes && !szabalyok.leheteUtni(mezo)) {
@@ -260,7 +273,7 @@ public class JatekTablaPanel extends JPanel {
     }
 
 
-    public void lepestVegrehajt(Mezo honnan, Mezo hova) {
+    private void lepestVegrehajt(Mezo honnan, Mezo hova) {
         hova.setIcon(honnan.getIcon());
         hova.setFoglalt(true);
         hova.setFehere(honnan.isFehere());
@@ -288,6 +301,7 @@ public class JatekTablaPanel extends JPanel {
         System.out.println("--- Kör vége ---");
         
         feherLep = !feherLep;
+        frissitNevKijelzes();
 
         System.out.println("Mostantól " + (feherLep ? "FEHÉR" : "FEKETE") + " jön.");
 
@@ -310,7 +324,7 @@ public class JatekTablaPanel extends JPanel {
     }
     
 
-    public void takaritas(){
+    private void takaritas(){
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (mezo[i][j].isSotetMezo()) {
@@ -325,20 +339,37 @@ public class JatekTablaPanel extends JPanel {
 
     private void ellenorizGyozelem() {
 
-    boolean vanMegLepes = szabalyok.vanMegLepes(feherLep);
+        boolean vanMegLepes = szabalyok.vanMegLepes(feherLep);
     
-    // Végignézzük az összes mezőt
+        // Végignézzük az összes mezőt
     
     
-    // Ha végignéztük az összeset, és NEM találtunk lehetőséget -> GAME OVER
-    if (!vanMegLepes) {
-        String nyertes = feherLep ? "Fekete" : "Fehér"; // Ha Fehér jönne, de nem tud, akkor Fekete nyert
-        
-        // Kiírjuk az üzenetet és visszalépünk a menübe
-        javax.swing.JOptionPane.showMessageDialog(this, 
-            "A játéknak vége! Nincs több lépés.\nA győztes: " + nyertes);
+        // Ha végignéztük az összeset, és NEM találtunk lehetőséget -> GAME OVER
+        if (!vanMegLepes) {        
+            String gyoztes = feherLep ? nev2 : nev1;
+
+            String nyertesNeve = feherLep ? nev2 : nev1;
+            String vesztesNeve = feherLep ? nev1 : nev2;
+            mainFrame.adatKezelo.jatekVegKez(nyertesNeve, vesztesNeve);
+
+            // Kiírjuk az üzenetet és visszalépünk a menübe
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "A játéknak vége! Nincs több lépés.\nA győztes: " + gyoztes);
             
-        mainFrame.panelCsere(new FomenuPanel(mainFrame));
+            mainFrame.panelCsere(new FomenuPanel(mainFrame));
+        }
     }
-}
+
+    private void frissitNevKijelzes() {
+        if (feherLep) {
+            // Fehér jön: Az alsó név legyen zöld (vagy cián), a felső alap
+            egyesJatekosPanel.setBackground(java.awt.Color.GREEN);
+            kettesJatekosPanel.setBackground(null); // Alapértelmezett
+        } else {
+            // Fekete jön: A felső név legyen zöld, az alsó alap
+            egyesJatekosPanel.setBackground(null);
+            kettesJatekosPanel.setBackground(java.awt.Color.GREEN);
+        }
+    }
+
 }

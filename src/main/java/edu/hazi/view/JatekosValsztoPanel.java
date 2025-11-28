@@ -25,26 +25,55 @@ public class JatekosValsztoPanel extends JPanel {
         titleLabel.setBorder(new EmptyBorder(0,0, 20, 0));
         add(titleLabel, BorderLayout.NORTH);
 
+        java.util.Set<String> nevek = mainFrame.adatKezelo.getJatekosNevek();
 
-        JComboBox<String> player1ComboBox = new JComboBox<>(new String[]{"Játékos 1", "Játékos 2"});
+        JComboBox<String> player1ComboBox = new JComboBox<>(nevek.toArray(new String[0]));
+        JComboBox<String> player2ComboBox = new JComboBox<>(nevek.toArray(new String[0]));
+        
+
+        player1ComboBox.insertItemAt("Vendég", 0);
+        player2ComboBox.insertItemAt("Vendég", 0);
+        
+        
+        player1ComboBox.setSelectedItem("Vendég");
+        player2ComboBox.setSelectedItem("Vendég");
+
         player1ComboBox.setEditable(true);
-        add(player1ComboBox, BorderLayout.WEST);
-
-        JComboBox<String> player2ComboBox = new JComboBox<>(new String[]{"Játékos 2", "Játékos 1"});
         player2ComboBox.setEditable(true);
+
+        
+        player1ComboBox.setBackground(java.awt.Color.WHITE);
+        player1ComboBox.setForeground(java.awt.Color.BLACK);
+        player2ComboBox.setBackground(java.awt.Color.BLACK);
+        player2ComboBox.setForeground(java.awt.Color.WHITE);
+
+        add(player1ComboBox, BorderLayout.WEST);
         add(player2ComboBox, BorderLayout.EAST);
 
 
         JButton startGameButton = new JButton("Játék Indítása");
+        
+
         startGameButton.addActionListener(e -> {
-            mainFrame.panelCsere(new JatekTablaPanel(mainFrame,
-                    (String) player1ComboBox.getSelectedItem(),
-                    (String) player2ComboBox.getSelectedItem()));
-            // Itt indíthatod el a játékot a kiválasztott játékosokkal
-            String player1 = (String) player1ComboBox.getSelectedItem();
-            String player2 = (String) player2ComboBox.getSelectedItem();
-            System.out.println("Játék indítása: " + player1 + " vs " + player2);
-            // További kód a játék indításához...
+            String p1 = (String) player1ComboBox.getEditor().getItem();
+            String p2 = (String) player2ComboBox.getEditor().getItem();
+
+            if (p1 == null || p1.trim().isEmpty() || p2 == null || p2.trim().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "A név nem lehet üres!", "Hiba", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            } 
+            if (p1.length()>15 || p2.length()>15) {
+                javax.swing.JOptionPane.showMessageDialog(this, "A név maximum 15 karakter hosszú!", "Hiba", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (p1.equals(p2) && !p1.equals("Vendég")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Két különböző játékost válassz!", "Hiba", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            mainFrame.panelCsere(new JatekTablaPanel(mainFrame, p1, p2));
+            
+            
+            System.out.println("Játék indítása: " + p1 + " vs " + p2);
         });
 
         add(startGameButton, BorderLayout.CENTER);
