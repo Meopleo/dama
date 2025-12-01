@@ -18,7 +18,7 @@ public class SzabalyokTest {
                 tabla[i][j] = new Mezo(i, j);
             }
         }
-        // Összekötjük a szomszédokat (egyszerűsítve, csak amire szükségünk van)
+        // Összekötjük a szomszédokat
         // Pl. (4,4) jobb-fenti szomszédja (3,5), annak a jobb-fenti (2,6)
         tabla[4][4].setJobbfent(tabla[3][5]);
         tabla[3][5].setJobbfent(tabla[2][6]);

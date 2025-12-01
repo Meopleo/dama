@@ -82,17 +82,14 @@ public class JatekTablaPanel extends JPanel {
         feherBabu = null;
 
         try {
-            // Először ellenőrizzük, megvan-e a fájl
             java.net.URL feketeUrl = getClass().getResource("/edu/hazi/view/fekete.png");
             java.net.URL feherUrl = getClass().getResource("/edu/hazi/view/feher.png");
 
             if (feketeUrl == null || feherUrl == null) {
                 System.err.println("HIBA: Nem találom a képeket! Ellenőrizd a fájlneveket és a mappát.");
-                // Ha nincs kép, üres ikonokat használunk, hogy ne omoljon össze
                 feketeBabu = new javax.swing.ImageIcon(); 
                 feherBabu = new javax.swing.ImageIcon();
             } else {
-                // Ha megvannak, betöltjük és méretezzük
                 javax.swing.ImageIcon eredetiFekete = new javax.swing.ImageIcon(feketeUrl);
                 javax.swing.ImageIcon eredetiFeher = new javax.swing.ImageIcon(feherUrl);
 
@@ -319,18 +316,18 @@ public class JatekTablaPanel extends JPanel {
 
         System.out.println("Mostantól " + (feherLep ? "FEHÉR" : "FEKETE") + " jön.");
 
-        // 1. Alaphelyzet visszaállítása: Minden mező sötét színre
+        // Alaphelyzet visszaállítása: Minden mező sötét színre
         takaritas();
 
-        // 2. Ütéskényszer ellenőrzése és jelzése
+        // Ütéskényszer ellenőrzése és jelzése
         if (szabalyok.globUtesKenyszer(feherLep)) {
             System.out.println("FIGYELEM: Ütéskényszer van!");
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     Mezo m = mezo[i][j];
-                    // Ha a bábu a mostani játékosé ÉS tud ütni -> SZÍNEZZÜK narancsara
+                    // Ha a bábu a mostani játékosé ÉS tud ütni -> SZÍNEZZÜK
                     if (m.isFoglalt() && m.isFehere() == feherLep && szabalyok.leheteUtni(m)) {
-                        m.setBackground(java.awt.Color.ORANGE); // Vagy PINK, ami jobban tetszik
+                        m.setBackground(java.awt.Color.ORANGE);
                     }
                 }
             }
@@ -381,7 +378,7 @@ public class JatekTablaPanel extends JPanel {
      */
     private void frissitNevKijelzes() {
         if (feherLep) {
-            // Fehér jön: Az alsó név legyen zöld (vagy cián), a felső alap
+            // Fehér jön: Az alsó név legyen zöld, a felső alap
             egyesJatekosPanel.setBackground(java.awt.Color.GREEN);
             kettesJatekosPanel.setBackground(null); // Alapértelmezett
         } else {

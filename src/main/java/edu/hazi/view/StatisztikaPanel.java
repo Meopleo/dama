@@ -39,8 +39,7 @@ public class StatisztikaPanel extends JPanel {
 
         JTable tabla = new JTable(adatok, oszlopok);
         tabla.setDragEnabled(false);
-        tabla.setEnabled(false); // Ne lehessen szerkeszteni
-
+        tabla.setEnabled(false);
         add(new javax.swing.JScrollPane(tabla), BorderLayout.CENTER);
 
 

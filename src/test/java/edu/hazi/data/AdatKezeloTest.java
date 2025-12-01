@@ -31,7 +31,7 @@ public class AdatKezeloTest {
         // ELLENŐRZÉS: Kapott 10 pontot?
         assertEquals(10, adat.getPontszam("TesztElek"));
         
-        // ELLENŐRZÉS: A vesztes 0-n maradt (nem ment mínuszba)?
+        // ELLENŐRZÉS: A vesztes 0-n maradt?
         assertEquals(0, adat.getPontszam("VesztesBela"));
     }
 
@@ -39,7 +39,7 @@ public class AdatKezeloTest {
     void testPontszamNovekedes() {
         AdatKezelo adat = new AdatKezelo(TESZT_FAJL);
         
-        // Adunk neki előre pontot (trükkösen kétszer nyer)
+        // Adunk neki előre pontot (kétszer nyer)
         adat.jatekVegKez("Bajnok", "Senki"); // 10 pont
         adat.jatekVegKez("Bajnok", "Senki"); // +10 pont
 
