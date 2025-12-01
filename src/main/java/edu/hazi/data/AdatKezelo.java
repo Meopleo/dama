@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.io.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 
 
 public class AdatKezelo {
@@ -61,75 +65,47 @@ public class AdatKezelo {
     }
 
     /**
-     * Elmenti a memóriában lévő adatokat a JSON fájlba.
-     * Kézi string-összefűzést használ a formátumhoz.
+     * Menteni a játékos adatokat a JSON fájlba.
+     * A Gson könyvtárat használja a JSON kezelésére.
      */
     private void mentes() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fajlNev))) {
-            writer.write("{");
-            writer.newLine();
-            int szamolo = 0;
-            int meret = jatekosAdatok.size();
+        // setPrettyPrinting() -> Hogy szépen tördelve mentse el, ne egy sorba
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-            for (Map.Entry<String, Integer> bejegyzes : jatekosAdatok.entrySet()) {
-                szamolo++;
-                String sor = "\"" + bejegyzes.getKey() + "\":" + bejegyzes.getValue();
-
-                if (szamolo < meret) {
-                    sor += ","; // Csak akkor írunk vesszőt, ha nem az utolsó elemről van szó
-                } 
-                writer.write(sor);
-                writer.newLine();
-            }
-
-            writer.write("}");
-            System.out.println("Adatok mentve.");
+        try (Writer writer = new FileWriter(fajlNev)) {
+            // Ennyi az egész! Egy sorban kiírja a Map-et JSON-be
+            gson.toJson(jatekosAdatok, writer);
+            System.out.println("Adatok mentve (Gson).");
         } catch (IOException e) {
-            System.err.println("Hiba az adatok mentésekor: " + e.getMessage());
+            System.err.println("Hiba mentéskor: " + e.getMessage());
         }
     }
 
     /**
-     * Betölti a játékos adatokat a JSON fájlból a memóriába.
-     * Egyszerű string feldolgozást használ a formátumhoz.
+     * Betölti a játékos adatokat a JSON fájlból.
+     * A Gson könyvtárat használja a JSON kezelésére.
      */
     private void betoltes() {
-        File fajl = new File(fajlNev);
-        if (!fajl.exists()) {
-            System.out.println("Nincs mentett adat.");
-            return; // Nincs fájl, nincs mit betölteni
-        }
+        File file = new File(fajlNev);
+        if (!file.exists()) return;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(fajlNev))) {
-            String sor;
+        Gson gson = new Gson();
+
+        try (Reader reader = new FileReader(fajlNev)) {
+            // Meg kell mondani a Gson-nak, hogy milyen típusú adatot várunk (Map<String, Integer>)
+            Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
             
-            while ((sor = reader.readLine()) != null) {
-                sor = sor.trim();
+            // Beolvassa és átalakítja a JSON-t Map-pé
+            jatekosAdatok = gson.fromJson(reader, type);
 
-                if (sor.equals("{") || sor.equals("}")) {
-                    continue; // Az első és utolsó sort kihagyjuk
-                }
-                if (sor.isEmpty()) {
-                    continue; // Üres sorokat kihagyjuk
-                }
-                sor = sor.replaceAll("\"", "").replace(",", "").replace("}","").replace("{","");
-
-                String[] darabok = sor.split(":");
-
-                if (darabok.length == 2) {
-                    String nev = darabok[0].trim();
-                    try {
-                        int pontszam = Integer.parseInt(darabok[1].trim());
-                        jatekosAdatok.put(nev, pontszam);
-                    } catch (NumberFormatException e) {
-                        System.err.println("Hibás pontszám formátum: " + darabok[1].trim());
-                    }
-                }
+            // Ha üres volt a fájl, a Gson null-t adhat vissza, ezt kezeljük le:
+            if (jatekosAdatok == null) {
+                jatekosAdatok = new HashMap<>();
             }
-            System.out.println("Adatok betöltve.");
-        } catch (IOException e) {
-            System.err.println("Hiba az adatok betöltésekor: " + e.getMessage());
 
+            System.out.println("Adatok betöltve (Gson).");
+        } catch (IOException e) {
+            System.err.println("Hiba betöltéskor: " + e.getMessage());
         }
     }
     
