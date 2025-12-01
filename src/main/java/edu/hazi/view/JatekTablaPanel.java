@@ -23,6 +23,8 @@ public class JatekTablaPanel extends JPanel {
 
     private javax.swing.ImageIcon feherDama;
     private javax.swing.ImageIcon feketeDama;
+    private javax.swing.ImageIcon feketeBabu;
+    private javax.swing.ImageIcon feherBabu;
     private Szabalyok szabalyok;
     private JLabel egyesJatekosPanel;
     private JLabel kettesJatekosPanel;
@@ -75,9 +77,9 @@ public class JatekTablaPanel extends JPanel {
             e.printStackTrace();
         }
         
-        // --- BIZTONSÁGOS KÉPBETÖLTÉS ---
-        javax.swing.ImageIcon feketeBabu = null;
-        javax.swing.ImageIcon feherBabu = null;
+        
+        feketeBabu = null;
+        feherBabu = null;
 
         try {
             // Először ellenőrizzük, megvan-e a fájl

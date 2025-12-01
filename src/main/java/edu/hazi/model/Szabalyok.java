@@ -72,7 +72,12 @@ public class Szabalyok {
         return false;
     }
 
-    
+    /**
+     * Ellenőrzi, hogy egy adott bábuval lehet-e lépni bármelyik irányba.
+     * Dáma esetén mind a 4, gyalog esetén csak a haladási irányt nézi.
+     * @param m A vizsgált mező (bábu)
+     * @return true, ha van lépési lehetőség, egyébként false
+     */
     public boolean leheteLepni(Mezo m){
         if (m.isDama()){
             return m.jobbFentUres() || m.balFentUres() || m.jobbLentUres() || m.balLentUres();
@@ -102,12 +107,11 @@ public class Szabalyok {
                 }
             }
         }
-        return false; // Nincs lehetőség -> Game Over
+        return false; // Game Over
     }
 
     /**
-     * Segédfüggvény, amely megvizsgálja, hogy egy adott irányban (szomszéd -> utána)
-     * lehetséges-e az ütés végrehajtása.
+     * Segédfüggvény, amely megvizsgálja, hogy egy adott irányban (szomszéd -> utána) lehetséges-e az ütés végrehajtása.
      * Ellenőrzi, hogy léteznek-e a mezők, a szomszédon ellenség van-e, és a mögötte lévő hely üres-e.
      * @param en A lépni kívánó bábu (mező)
      * @param szomszed A közvetlen szomszédos mező az adott irányban (az "áldozat")

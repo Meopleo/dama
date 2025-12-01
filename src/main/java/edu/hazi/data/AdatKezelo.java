@@ -27,7 +27,7 @@ public class AdatKezelo {
         betoltes();
     }
 
-    // Visszaadja a játékosok listáját (a legördülő menünek kell majd)
+    // Visszaadja a játékosok listáját
     public Set<String> getJatekosNevek() {
         return jatekosAdatok.keySet();
     }
@@ -73,7 +73,7 @@ public class AdatKezelo {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         try (Writer writer = new FileWriter(fajlNev)) {
-            // Ennyi az egész! Egy sorban kiírja a Map-et JSON-be
+            // Egy sorban kiírja a Map-et JSON-be
             gson.toJson(jatekosAdatok, writer);
             System.out.println("Adatok mentve (Gson).");
         } catch (IOException e) {
@@ -92,13 +92,10 @@ public class AdatKezelo {
         Gson gson = new Gson();
 
         try (Reader reader = new FileReader(fajlNev)) {
-            // Meg kell mondani a Gson-nak, hogy milyen típusú adatot várunk (Map<String, Integer>)
             Type type = new TypeToken<HashMap<String, Integer>>(){}.getType();
-            
-            // Beolvassa és átalakítja a JSON-t Map-pé
+
             jatekosAdatok = gson.fromJson(reader, type);
 
-            // Ha üres volt a fájl, a Gson null-t adhat vissza, ezt kezeljük le:
             if (jatekosAdatok == null) {
                 jatekosAdatok = new HashMap<>();
             }

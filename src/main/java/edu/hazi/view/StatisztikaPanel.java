@@ -28,7 +28,7 @@ public class StatisztikaPanel extends JPanel {
 
         String[] oszlopok = {"Játékos Név", "Győzelmi Pontok"};
         Object[][] adatok = new Object[statisztikak.size()][2];
-        int index = 0;
+        int index = 0;  
         for (Map.Entry<String, Integer> entry : statisztikak.entrySet()) {
             adatok[index][0] = entry.getKey();
             adatok[index][1] = entry.getValue();
@@ -38,6 +38,7 @@ public class StatisztikaPanel extends JPanel {
         
 
         JTable tabla = new JTable(adatok, oszlopok);
+        tabla.setDragEnabled(false);
         tabla.setEnabled(false); // Ne lehessen szerkeszteni
 
         add(new javax.swing.JScrollPane(tabla), BorderLayout.CENTER);
